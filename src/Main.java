@@ -2,8 +2,8 @@ public class Main {
     public static void main(String[] args) {
 
         // Создание объектов потока для кроликов и черепах
-        Animal rabbit = new Animal(" Кролик ");
-        Animal turtle = new Animal(" Черепаха ");
+        Animal rabbit = new Animal(" Кролик ", 1);
+        Animal turtle = new Animal(" Черепаха ", 10);
 
         System.out.println("Старт!");
         rabbit.start();
@@ -12,41 +12,51 @@ public class Main {
 }
 
 class Animal extends Thread {
+    String name;
+    int priority;
+    final int distance = 11;
 
-    // Статус соревнования
-    public static boolean flag = true;
-    int distance;
-
-    // Конструктор : Используются для передачи имени потока
-    public Animal(String name) {
-        super(name);
+    public Animal(String s, int i) {
+        this.name = s;
+        this.priority = i;
     }
 
     @Override
     public void run() {
+        Thread.currentThread().setPriority(priority);
+        Thread.currentThread().setName(name);
+        int timeToStep = 1000 / (Thread.currentThread().getPriority());
+        for (int i = 0; i < distance; i++) {
+            try {
+                Thread.sleep(timeToStep);
+                System.out.println(getName() + (" - ") + (i * 100) + " метров ");
+            } catch (Exception e) {
 
-
-        while (flag) {
-
-            // Получаем случайное число
-            double random = Math.random();
-            if (random < 0.5 && " Кролик ".equals(this.getName())) {
-
-                distance += 50;
-                System.out.println(" Кролик пробежал " + distance + " метров ");
+                e.printStackTrace();
             }
-            if (random >= 0.5 && " Черепаха ".equals(this.getName())) {
+            if (i == distance / 5) {
+                double random = Math.random();
+                int rnd;
+                if (random < 0.5) {
+                    rnd = 1;
 
-                distance += 50;
-                System.out.println(" Черепаха пробежала " + distance + " метров ");
-            }
+                } else {
+                    rnd = 2;
 
-            if (distance == 1000) {
-                flag = false;
-                System.out.println(this.getName() + " побеждает в соревновании！");
+                }
+                if (Thread.currentThread().getPriority() == rnd) {
+                    Thread.currentThread().setPriority(10);
+                } else {
+                    Thread.currentThread().setPriority(rnd);
+                }
+
+
             }
+            timeToStep = 1000 / (Thread.currentThread().getPriority());
+
         }
+
     }
-
-
 }
+
+
