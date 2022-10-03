@@ -1,7 +1,8 @@
 public class Main {
     public static void main(String[] args) {
 
-        // Создание объектов потока для кроликов и черепах
+        // Создание объектов потока для кролика и черепахи
+       
         Animal rabbit = new Animal(" Кролик ", 1);
         Animal turtle = new Animal(" Черепаха ", 10);
 
